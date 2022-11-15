@@ -24,3 +24,7 @@ You can set substrings to render as:
 You can set CSS classes to be defined as:
 - [borders](classes/borders.txt)
 - [highlight areas](classes/areas.txt)
+
+### Notes
+
+Make sure what you escaped all special characters in source file.
