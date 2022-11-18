@@ -1,4 +1,9 @@
 @echo off
+goto ArchitectureCheck
+
+:GetDirectory
+set "%~1=%~n2"
+exit /b 0
 
 :ArchitectureCheck
 if exist "%ProgramFiles(x86)%" (
@@ -18,15 +23,16 @@ if not %ERRORLEVEL% == 0 (
 	goto GitInstall
 )
 
-
 :ReceivingProject
 echo Enter the origin:
 set /p source=
 
 if "%source%" == "" exit /b 0
+call :GetDirectory project "https://github.com/GameTAS.git"
+if "%project%" == "" exit /b 0
 
-mkdir GameTAS
-pushd GameTAS
+mkdir %project%
+pushd %project%
 
 git init
 git remote add origin "%source%"
@@ -46,13 +52,15 @@ if not %ERRORLEVEL% == 0 (
 
 popd
 
-
-echo echo What is done now?> sender.bat
+echo @echo off> sender.bat
+echo echo What is done now?>> sender.bat
 echo set /p message=>> sender.bat
+echo pushd "%project%">> sender.bat
 echo git pull origin develop>> sender.bat
 echo git add .>> sender.bat
 echo git commit -m "%%message%%">> sender.bat
 echo git push origin develop>> sender.bat
+echo popd>> sender.bat
 
 REM Secret technique to self-destroy
 :DeleteFile
